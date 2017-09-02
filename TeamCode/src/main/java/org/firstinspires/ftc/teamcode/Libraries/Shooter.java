@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
  * Created by Arib on 10/6/2016.
  */
 public class Shooter {
-    public DcMotor shooterR;
+    DcMotor shooterR;
     DcMotor shooterL;
     LinearOpMode opMode;
 

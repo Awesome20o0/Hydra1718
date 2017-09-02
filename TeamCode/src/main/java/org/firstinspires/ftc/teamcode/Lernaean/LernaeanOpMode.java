@@ -664,9 +664,6 @@ public abstract class LernaeanOpMode extends OpMode {
         liftRelease.setPower(0);
     }
 
-    public double getVoltage() {
-        return hardwareMap.voltageSensor.get("Motor Controller 5").getVoltage();
-    }
 
     private void composeTelemetry() {
 
