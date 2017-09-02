@@ -556,6 +556,10 @@ public abstract class LernaeanOpMode extends OpMode {
 
     }
 
+    public double getVoltage() {
+        return hardwareMap.voltageSensor.get("Motor Controller 5").getVoltage();
+    }
+
     public double getRightODS() {
         return right.getLightDetected();
     }

@@ -35,6 +35,11 @@ public abstract class PapaSmurfOpMode extends OpMode {
     //For reversing which side is "forward" during the match
     boolean reversed;
 
+    //To be accessed by the actual opMode
+    double slowingFactor;
+    double powerL;
+    double powerR;
+
     @Override
     public void init() {
         opMode = this;
@@ -55,29 +60,29 @@ public abstract class PapaSmurfOpMode extends OpMode {
 
     public void startMotors(double r, double l) {
         if(reversed) {
-            motorFL.setPower(l);
-            motorBL.setPower(l);
-            motorFR.setPower(-r);
-            motorBR.setPower(-r);
+            motorFL.setPower(l * slowingFactor);
+            motorBL.setPower(l * slowingFactor);
+            motorFR.setPower(-r * slowingFactor);
+            motorBR.setPower(-r * slowingFactor);
         } else {
-            motorFL.setPower(-l);
-            motorBL.setPower(-l);
-            motorFR.setPower(r);
-            motorBR.setPower(r);
+            motorFL.setPower(-l * slowingFactor);
+            motorBL.setPower(-l * slowingFactor);
+            motorFR.setPower(r * slowingFactor);
+            motorBR.setPower(r * slowingFactor);
         }
     }
 
     public void startMotorsHalf(double r, double l) {
         if (reversed) {
-            motorFL.setPower(l / 2);
-            motorBL.setPower(l / 2);
-            motorFR.setPower(-r / 2);
-            motorBR.setPower(-r / 2);
+            motorFL.setPower(l * .5 * slowingFactor);
+            motorBL.setPower(l * .5 * slowingFactor);
+            motorFR.setPower(-r * .5 * slowingFactor);
+            motorBR.setPower(-r * .5 * slowingFactor);
         } else {
-            motorFL.setPower(-l / 2);
-            motorBL.setPower(-l / 2);
-            motorFR.setPower(r / 2);
-            motorBR.setPower(r / 2);
+            motorFL.setPower(-l * .5 * slowingFactor);
+            motorBL.setPower(-l * .5 * slowingFactor);
+            motorFR.setPower(r * .5 * slowingFactor);
+            motorBR.setPower(r * .5 * slowingFactor);
         }
     }
 
@@ -90,8 +95,23 @@ public abstract class PapaSmurfOpMode extends OpMode {
 
     // Encoder Stuff
     public int getEncoderAvg() {
+
+        // Throws out any bad encoders in attempt to keep accurate average
+        int numZeros = 0;
+        if (motorBR.getCurrentPosition() == -1) {
+            numZeros++;
+        }
+        if (motorFR.getCurrentPosition() == -1) {
+            numZeros++;
+        }
+        if (motorBL.getCurrentPosition() == -1) {
+            numZeros++;
+        }
+        if (motorFL.getCurrentPosition() == -1) {
+            numZeros++;
+        }
         return (Math.abs(motorBR.getCurrentPosition()) + Math.abs(motorBL.getCurrentPosition()) +
-                Math.abs(motorFR.getCurrentPosition()) + Math.abs(motorFL.getCurrentPosition())) / 4;
+                Math.abs(motorFR.getCurrentPosition()) + Math.abs(motorFL.getCurrentPosition())) / (4 - numZeros);
     }
 
     public int getRightEncoderAvg() {
